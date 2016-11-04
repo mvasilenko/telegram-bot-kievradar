@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+        <title> Отправка файла </title>
+    </head>
+
+    <body>
+        <form action="https://api.telegram.org/bot|ввести Token бота|/sendphoto" enctype="multipart/form-data" method="post">
+
+            <p><b>ID пользователя:</b>
+            <input type="text" name="chat_id" value="|ввести id получателя|"></p>
+
+            <p><b>Файл для отправки:</b>
+            <input type="file" name="photo" mulltiple accept="image/*, image/jpeg"></p>
+
+            <p><input type="submit" value="Отправить"></p>
+        </form>
+    </body>
+</html>
