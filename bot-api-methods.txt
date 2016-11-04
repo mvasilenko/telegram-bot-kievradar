@@ -1,0 +1,12 @@
+API reference https://core.telegram.org/bots/api
+
+curl "https://api.telegram.org/bot<TOKEN>/getupdates
+	sendmessage?chat_id=id&text=textmessage
+...	forwardmessage?from_chat_id=id&chat_id=id&message_id=id
+...  	sendSticker?chat_id=user_id&sticker=sticker_id
+...   	sendLocation?chat_id=user_id&latitude=51.443221&longitude=31.505446
+...	sendChatAction?chat_id=user_id&action=typing
+	getUserProfilePhotos?chat_id=user_id& - returns file id
+	getFile&file_id=file_id - returns picture url, which is available 1 hour
+	url is like https://api.telegram.org/file/bot<TOKEN>/photo/file_1.jpg
+	
