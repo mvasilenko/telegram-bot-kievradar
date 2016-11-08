@@ -57,7 +57,7 @@ def radar_kiev(bot, update):
     pngfile="/tmp/UKBB_latest.png"
     pngtransfile="/tmp/UKBB_transparent.png"
     output="/tmp/output.png"
-    mapfile="/tmp/map.png"
+    mapfile="map.png"
 
     # get radar black-white png
     urllib.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
