@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # Simple Bot to reply to Telegram messages
@@ -22,6 +22,10 @@ import logging
 import syslog
 import requests
 import shutil
+import re
+import random
+
+import lxml.html
 
 
 from PIL import Image
@@ -49,6 +53,20 @@ def start(bot, update):
 def help(bot, update):
     update.message.reply_text('Help!')
 
+def maidan_news(bot, update):
+
+    # send typing...
+    bot.sendChatAction(action=telegram.ChatAction.TYPING,chat_id=update.message.chat_id)
+
+    url = "https://news.google.ru/news/section?hl=ru&ned=uk_ua&q=%D0%BC%D0%B0%D0%B9%D0%B4%D0%B0%D0%BD"
+    html = requests.get(url).text.encode("utf-8")
+
+    tree = lxml.html.document_fromstring(html)
+    elements = tree.find_class("esc-lead-snippet-wrapper")
+
+    update.message.reply_text((re.sub('<[^<]+?>', '',lxml.html.tostring(random.choice(elements),pretty_print=True,encoding='unicode'))))
+
+
 def radar_kiev(bot, update):
 
     # send typing...
@@ -57,7 +75,7 @@ def radar_kiev(bot, update):
     pngfile="/tmp/UKBB_latest.png"
     pngtransfile="/tmp/UKBB_transparent.png"
     output="/tmp/output.png"
-    mapfile="map.png"
+    mapfile="/tmp/map.png"
 
     # get radar black-white png
     urllib.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
@@ -105,6 +123,7 @@ def main():
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("radar_kiev", radar_kiev))
+    dp.add_handler(CommandHandler("maidan_news", maidan_news))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
