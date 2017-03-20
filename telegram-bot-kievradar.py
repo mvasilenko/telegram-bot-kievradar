@@ -38,7 +38,6 @@ import numpy as np
 import urllib
 
 tmp_imagename = '/tmp/RADAR_KIEV.png'
-TOKEN_BOT = ''
 
 # Enable logging
 logging.basicConfig(level=logging.INFO,
