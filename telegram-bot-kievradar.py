@@ -11,7 +11,9 @@ the Dispatcher and registered at their respective places.
 Then, the bot is started and runs until we press Ctrl-C on the command line.
 
 Usage:
-Basic Echobot example, repeats messages, and sends weather map with radar meteo data in Kiev, Ukraine
+Basic Echobot example, repeats messages, Cand sends
+weather map with radar meteo data in Kiev, Ukraine
+
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
@@ -24,6 +26,8 @@ import requests
 import shutil
 import re
 import random
+import os
+import sys
 
 import lxml.html
 
@@ -33,19 +37,21 @@ import numpy as np
 
 import urllib
 
-tmp_imagename='/tmp/RADAR_KIEV.png'
-TOKEN_BOT=''
+tmp_imagename = '/tmp/RADAR_KIEV.png'
+TOKEN_BOT = ''
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 logger = logging.getLogger(__name__)
 
-syslog.syslog(syslog.LOG_INFO,'telegram bot started')
+syslog.syslog(syslog.LOG_INFO, 'telegram bot started')
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
+
+
 def start(bot, update):
     update.message.reply_text('Hi!')
 
@@ -53,10 +59,11 @@ def start(bot, update):
 def help(bot, update):
     update.message.reply_text('Help!')
 
+
 def maidan_news(bot, update):
 
     # send typing...
-    bot.sendChatAction(action=telegram.ChatAction.TYPING,chat_id=update.message.chat_id)
+    bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
 
     url = "https://news.google.ru/news/section?hl=ru&ned=uk_ua&q=%D0%BC%D0%B0%D0%B9%D0%B4%D0%B0%D0%BD"
     html = requests.get(url).text.encode("utf-8")
@@ -64,33 +71,34 @@ def maidan_news(bot, update):
     tree = lxml.html.document_fromstring(html)
     elements = tree.find_class("esc-lead-snippet-wrapper")
 
-    update.message.reply_text((re.sub('<[^<]+?>', '',lxml.html.tostring(random.choice(elements),pretty_print=True,encoding='unicode'))))
+    update.message.reply_text((re.sub('<[^<]+?>', '', lxml.html.tostring(random.choice(elements),
+                              pretty_print=True, encoding='unicode'))))
 
 
 def radar_kiev(bot, update):
 
     # send typing...
-    bot.sendChatAction(action=telegram.ChatAction.TYPING,chat_id=update.message.chat_id)
+    bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
 
-    pngfile="/tmp/UKBB_latest.png"
-    pngtransfile="/tmp/UKBB_transparent.png"
-    output="/tmp/output.png"
-    mapfile="/tmp/map.png"
+    pngfile = "/tmp/UKBB_latest.png"
+    pngtransfile = "/tmp/UKBB_transparent.png"
+    output = "/tmp/output.png"
+    mapfile = "/tmp/map.png"
 
     # get radar black-white png
-    urllib.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
+    urllib.request.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
 
-    orig_color = (204,204,204,255)
-    replacement_color = (255,255,255,0)
+    orig_color = (204, 204, 204, 255)
+    replacement_color = (255, 255, 255, 0)
     img = Image.open(pngfile).convert('RGBA')
     data = np.array(img)
 
     # replace gray colors with transparent
-    colors=[204,192]
+    colors = [204, 192]
 
     for color in colors:
-      orig_color = (color,color,color,255)
-      data[(data == orig_color).all(axis = -1)] = replacement_color
+        orig_color = (color, color, color, 255)
+        data[(data == orig_color).all(axis=-1)] = replacement_color
 
     img2 = Image.fromarray(data, mode='RGBA')
     img2.save(pngtransfile)
@@ -99,12 +107,14 @@ def radar_kiev(bot, update):
     foreground = Image.open(pngtransfile)
 
     # merge map with radar png
-    background.paste(foreground,(3,10),foreground)
+    background.paste(foreground, (3, 10), foreground)
     background.save(output)
 
     # send it as answer
-    with open(output,'r') as photo_file:
-          update.message.reply_photo(photo_file)
+    bot.sendPhoto(chat_id=update.message.chat_id, photo=open(output, 'rb'))
+#    with open(output,'rb') as photo_file:
+#          update.message.reply_photo(photo_file)
+
 
 def echo(bot, update):
     update.message.reply_text(update.message.text)
@@ -115,8 +125,12 @@ def error(bot, update, error):
 
 
 def main():
+    if "TOKEN_BOT" not in os.environ:
+        print("Please set the environment variable TOKEN_BOT")
+        sys.exit(1)
+
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(TOKEN_BOT)
+    updater = Updater(os.environ["TOKEN_BOT"])
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher

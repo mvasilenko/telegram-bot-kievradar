@@ -1,0 +1,5 @@
+python-telegram-bot
+numpy
+Pillow
+requests
+lxml
