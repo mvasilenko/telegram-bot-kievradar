@@ -40,7 +40,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                        for var, val in json_params['repository'].items())
 
         # Check if the secret URL was called
-        if args.token == self.path[1:]:
+        if args.token in self.path:
             logging.info("Start executing '%s'" % args.cmd)
             try:
                 Popen(args.cmd, env=env).wait()
