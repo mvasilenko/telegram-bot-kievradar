@@ -3,6 +3,5 @@ numpy
 Pillow
 requests
 lxml
-unittest
 flaky
 nose
