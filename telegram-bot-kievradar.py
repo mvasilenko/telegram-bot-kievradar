@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # Simple Bot to reply to Telegram messages
@@ -80,12 +80,12 @@ def kiev_news(bot, update):
         titles = [h2.text for h2 in soup.findAll('div', attrs={'class': 'story__text'})]
         index = random.randrange(len(titles))
         news_string = titles[index]
-        hash_object = hashlib.md5(news_string.encode('utf-8'))
+        hash_object = hashlib.md5(news_string.encode())
         hexdigest = hash_object.hexdigest()
 
         if not hexdigest in news_hashes:
             news_hashes.append(hexdigest)
-            update.message.reply_text(news_string.encode('utf-8'))
+            update.message.reply_text(news_string)
             i = 10 # break
 
 def maidan_news(bot, update):
@@ -119,7 +119,7 @@ def radar_kiev(bot, update):
 #            r.raw.decode_content = True
 #            shutil.copyfileobj(r.raw, f)
 
-    urllib.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
+    urllib.request.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
 
     orig_color = (204, 204, 204, 255)
     replacement_color = (255, 255, 255, 0)
