@@ -65,7 +65,7 @@ def help(bot, update):
 
 
 
-def yandex_news():
+def kiev_news():
     url="https://news.yandex.ua/Kyiv/index.html?lang=ru"
     i = 0
     hexdigest = "0"
