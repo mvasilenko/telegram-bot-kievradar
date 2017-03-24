@@ -39,7 +39,7 @@ import lxml.html
 from PIL import Image
 import numpy as np
 
-import urllib#.request
+import urllib
 
 tmp_imagename = '/tmp/RADAR_KIEV.png'
 news_hashes = ["0"]
