@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Simple Bot to reply to Telegram messages
@@ -28,6 +28,10 @@ import re
 import random
 import os
 import sys
+import requests
+import hashlib
+import random
+from bs4 import BeautifulSoup
 
 import lxml.html
 
@@ -38,6 +42,7 @@ import numpy as np
 import urllib
 
 tmp_imagename = '/tmp/RADAR_KIEV.png'
+news_hashes = ["0"]
 
 # Enable logging
 logging.basicConfig(level=logging.INFO,
@@ -58,6 +63,25 @@ def start(bot, update):
 def help(bot, update):
     update.message.reply_text('Help!')
 
+
+
+def yandex_news():
+    url="https://news.yandex.ua/Kyiv/index.html?lang=ru"
+    i = 0
+    hexdigest = "0"
+    while hexdigest in news_hashes and i < 10:
+        i = i + 1
+        request = requests.get(url)
+        soup = BeautifulSoup(request.text,"lxml")
+        titles = [h2.text for h2 in soup.findAll('div', attrs={'class': 'story__text'})]
+        index = random.randrange(len(titles))
+        news_string = titles[index]
+        hash_object = hashlib.md5(news_string.encode('utf-8'))
+        hexdigest = hash_object.hexdigest()
+
+        if not hexdigest in news_hashes:
+            news_hashes.append(hexdigest)
+            return news_string
 
 def maidan_news(bot, update):
 
@@ -136,7 +160,7 @@ def main():
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("radar_kiev", radar_kiev))
-    dp.add_handler(CommandHandler("maidan_news", maidan_news))
+    dp.add_handler(CommandHandler("kiev_news", kiev_news))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
