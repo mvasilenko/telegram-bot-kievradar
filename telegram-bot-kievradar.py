@@ -80,7 +80,7 @@ def kiev_news(bot, update):
         titles = [h2.text for h2 in soup.findAll('div', attrs={'class': 'story__text'})]
         index = random.randrange(len(titles))
         news_string = titles[index]
-        hash_object = hashlib.md5(news_string.encode())
+        hash_object = hashlib.md5(news_string.encode('utf-8'))
         hexdigest = hash_object.hexdigest()
 
         if not hexdigest in news_hashes:
