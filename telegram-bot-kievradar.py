@@ -85,8 +85,8 @@ def kiev_news(bot, update):
 
         if not hexdigest in news_hashes:
             news_hashes.append(hexdigest)
-            update.message.reply_text(news_string.encode('utf-8')
-            i=10
+            update.message.reply_text(news_string.encode('utf-8'))
+            i = 10 # break
 
 def maidan_news(bot, update):
 
