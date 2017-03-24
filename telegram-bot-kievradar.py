@@ -39,7 +39,7 @@ import lxml.html
 from PIL import Image
 import numpy as np
 
-import urllib
+import urllib.request
 
 tmp_imagename = '/tmp/RADAR_KIEV.png'
 news_hashes = ["0"]
@@ -65,7 +65,11 @@ def help(bot, update):
 
 
 
-def kiev_news():
+def kiev_news(bot, update):
+
+    # send typing...
+    bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
+
     url="https://news.yandex.ua/Kyiv/index.html?lang=ru"
     i = 0
     hexdigest = "0"
@@ -81,12 +85,11 @@ def kiev_news():
 
         if not hexdigest in news_hashes:
             news_hashes.append(hexdigest)
-            return news_string
+            update.message.reply_text(news_string.encode('utf-8')
+            break
 
 def maidan_news(bot, update):
 
-    # send typing...
-    bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
 
     url = "https://news.google.ru/news/section?hl=ru&ned=uk_ua&q=%D0%BC%D0%B0%D0%B9%D0%B4%D0%B0%D0%BD"
     html = requests.get(url).text.encode("utf-8")
@@ -103,12 +106,19 @@ def radar_kiev(bot, update):
     # send typing...
     bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
 
+    meteoby_url = "http://meteoinfo.by/radar/UKBB/UKBB_latest.png"
     pngfile = "/tmp/UKBB_latest.png"
     pngtransfile = "/tmp/UKBB_transparent.png"
     output = "/tmp/output.png"
     mapfile = "/tmp/map.png"
 
     # get radar black-white png
+#    r = requests.get(meteoby_url, stream = True)
+#    if r.status_code == 200:
+#        with open(pngfile, 'wb') as f:
+#            r.raw.decode_content = True
+#            shutil.copyfileobj(r.raw, f)
+
     urllib.request.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
 
     orig_color = (204, 204, 204, 255)
