@@ -39,7 +39,7 @@ import lxml.html
 from PIL import Image
 import numpy as np
 
-import urllib.request
+import urllib#.request
 
 tmp_imagename = '/tmp/RADAR_KIEV.png'
 news_hashes = ["0"]
@@ -119,7 +119,7 @@ def radar_kiev(bot, update):
 #            r.raw.decode_content = True
 #            shutil.copyfileobj(r.raw, f)
 
-    urllib.request.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
+    urllib.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
 
     orig_color = (204, 204, 204, 255)
     replacement_color = (255, 255, 255, 0)
