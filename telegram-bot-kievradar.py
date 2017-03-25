@@ -46,7 +46,8 @@ news_hashes = ["0"]
 
 # Enable logging
 logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+                    format='%(asctime)s - %(name)s \
+                    - %(levelname)s - %(message)s')
 
 logger = logging.getLogger(__name__)
 
@@ -64,47 +65,42 @@ def help(bot, update):
     update.message.reply_text('Help!')
 
 
-
-def kiev_news(bot, update):
-
-    # send typing...
-    bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
-
-    url="https://news.yandex.ua/Kyiv/index.html?lang=ru"
+def kiev_news_text():
+    url = "https://news.yandex.ua/Kyiv/index.html?lang=ru"
     i = 0
     hexdigest = "0"
+    request = requests.get(url)
+    soup = BeautifulSoup(request.text, "lxml")
+    titles = [h2.text for h2 in soup.findAll(
+        'div', attrs={'class': 'story__text'})]
     while hexdigest in news_hashes and i < 10:
         i = i + 1
-        request = requests.get(url)
-        soup = BeautifulSoup(request.text,"lxml")
-        titles = [h2.text for h2 in soup.findAll('div', attrs={'class': 'story__text'})]
         index = random.randrange(len(titles))
         news_string = titles[index]
         hash_object = hashlib.md5(news_string.encode('utf-8'))
         hexdigest = hash_object.hexdigest()
 
-        if not hexdigest in news_hashes:
-            news_hashes.append(hexdigest)
-            update.message.reply_text(news_string)
-            i = 10 # break
+        if hexdigest not in news_hashes \
+                and "пробки" not in news_string \
+                and "синоптик" not in news_string:
+                    news_hashes.append(hexdigest)
+                    i = 10  # break
 
-def maidan_news(bot, update):
+    return news_string
 
 
-    url = "https://news.google.ru/news/section?hl=ru&ned=uk_ua&q=%D0%BC%D0%B0%D0%B9%D0%B4%D0%B0%D0%BD"
-    html = requests.get(url).text.encode("utf-8")
-
-    tree = lxml.html.document_fromstring(html)
-    elements = tree.find_class("esc-lead-snippet-wrapper")
-
-    update.message.reply_text((re.sub('<[^<]+?>', '', lxml.html.tostring(random.choice(elements),
-                              pretty_print=True, encoding='unicode'))))
+def kiev_news(bot, update):
+    # send typing...
+    bot.sendChatAction(action=telegram.ChatAction.TYPING,
+                       chat_id=update.message.chat_id)
+    update.message.reply_text(kiev_news_text())
 
 
 def radar_kiev(bot, update):
 
     # send typing...
-    bot.sendChatAction(action=telegram.ChatAction.TYPING, chat_id=update.message.chat_id)
+    bot.sendChatAction(action=telegram.ChatAction.TYPING,
+                       chat_id=update.message.chat_id)
 
     meteoby_url = "http://meteoinfo.by/radar/UKBB/UKBB_latest.png"
     pngfile = "/tmp/UKBB_latest.png"
@@ -119,7 +115,8 @@ def radar_kiev(bot, update):
 #            r.raw.decode_content = True
 #            shutil.copyfileobj(r.raw, f)
 
-    urllib.request.urlretrieve("http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
+    urllib.request.urlretrieve(
+        "http://meteoinfo.by/radar/UKBB/UKBB_latest.png", pngfile)
 
     orig_color = (204, 204, 204, 255)
     replacement_color = (255, 255, 255, 0)
