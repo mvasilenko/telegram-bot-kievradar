@@ -1,5 +1,5 @@
 #! /bin/bash
-IMAGE="mvasilenko/telegram-bot-kievradar"
+IMAGE="mvasilenko/telegram_bot_kievradar"
 DIR=`pwd`
 docker pull $IMAGE
 docker ps | grep $IMAGE | awk '{print $1}' | xargs docker stop
