@@ -3,7 +3,4 @@ numpy
 Pillow
 requests
 lxml
-flaky
-nose
 beautifulsoup4
-nose
