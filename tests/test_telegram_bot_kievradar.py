@@ -10,7 +10,7 @@ class TestTelegramBotKievRadar(unittest.TestCase):
 #        config.token = "277854650"
 #        self.assertFalse(spisok.dev_version())
     def test_kiev_news_text(self):
-        self.assertTrue(telegram_bot_kievradar.kiev_news_text() > 0)
+        self.assertTrue(len(telegram_bot_kievradar.kiev_news_text()) > 0)
 
 if __name__ == '__main__':
     unittest.main()
