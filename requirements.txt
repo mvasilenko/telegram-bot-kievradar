@@ -6,3 +6,4 @@ lxml
 flaky
 nose
 beautifulsoup4
+nosetests
