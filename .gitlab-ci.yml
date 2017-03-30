@@ -14,5 +14,4 @@ test_app:
   script:
     - pip install -r requirements.txt
     - pip install -r requirements-test.txt
-    - which nosetests
     - nosetests
