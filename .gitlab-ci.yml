@@ -6,7 +6,7 @@ types:
 
 build_app:
   type: build
-  script
+  script:
     - pip install -r requirements.txt
 
 test_app:
