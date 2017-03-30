@@ -1,10 +1,12 @@
+image: python3
+
 types:
   - build
   - test
 
 build_app:
   type: build
-  script: echo Building!
+  script: pip install -r requerements.txt
 
 test_app:
   type: test
