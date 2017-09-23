@@ -166,7 +166,7 @@ def main():
     dp = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("radar_kiev", radar_kiev))
+    dp.add_handler(CommandHandler("kiev_radar", radar_kiev))
     dp.add_handler(CommandHandler("kiev_news", kiev_news))
 
     # on noncommand i.e message - echo the message on Telegram
@@ -174,14 +174,17 @@ def main():
 
     # log all errors
     dp.add_error_handler(error)
+    
+    logging.getLogger().setLevel(logging.DEBUG)
+    logger.debug("acid232 dev version")
 
     # Start the Bot
-#    updater.start_polling()
+    updater.start_polling()
 
     # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
-#    updater.idle()
+    updater.idle()
 
 
 if __name__ == '__main__':

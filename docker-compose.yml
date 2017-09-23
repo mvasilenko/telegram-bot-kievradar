@@ -6,3 +6,17 @@ services:
     image: mvasilenko/telegram-bot-kievradar
     build: .
     command: /tmp/telegram_bot_kievradar.py
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      - TOKEN_BOT=${TOKEN_BOT}
+  db:
+    image: mysql
+    restart: always
+    container_name: telegram-bot-kievradar-db
+    volumes:
+      - /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
