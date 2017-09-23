@@ -17,6 +17,8 @@ services:
     restart: always
     container_name: telegram-bot-kievradar-db
     volumes:
-      - /var/lib/mysql
+      - mysql-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+volumes:
+  mysql-data:
