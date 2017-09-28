@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    working_directory: /app
     docker:
       - image: circleci/python:3
     steps:
@@ -17,6 +18,7 @@ jobs:
           command: |
             login="$(aws ecr get-login |sed 's/-e none//')"
             ${login}
+            echo "ecr_ep=${ECR_ENDPOINT}"
             docker tag app "${ECR_ENDPOINT}/telegram-bot-kievradar:${CIRCLE_SHA1}"
             docker push "${ECR_ENDPOINT}/telegram-bot-kievradar:${CIRCLE_SHA1}"
 # login to docker hub and push the image
