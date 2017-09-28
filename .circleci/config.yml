@@ -17,7 +17,9 @@ jobs:
           command: |
             login="$(aws ecr get-login |sed 's/-e none//')"
             ${login}
+            echo docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
             docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+            echo docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
             docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
 # login to docker hub and push the image
 #          docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
