@@ -15,7 +15,7 @@ jobs:
       - deploy:
           name: Push application Docker image
           command: |
-            login="$(aws ecr get-login)"
+            login="$(aws ecr get-login |sed 's/-e none//')"
             ${login}
             docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
             docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
