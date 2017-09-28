@@ -12,5 +12,14 @@ jobs:
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
           docker build -t mvasilenko/telegram-bot-kievradar:$TAG .      # (3)
-          docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
-          docker push mvasilenko/telegram-bot-kievradar:$TAG             
+      - deploy:
+        name: Push application Docker image
+        command: |
+# login to aws ecr registry and push image
+	  login="$(aws ecr get-login)"
+          ${login}
+          docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+          docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+# login to docker hub and push the image
+#          docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
+#          docker push mvasilenko/telegram-bot-kievradar:$TAG             
