@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-#      - run: |
-#          sudo pip install -r requirements.txt
+      - run: |
+          sudo pip install aws-cli 
       # build and push Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
