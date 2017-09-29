@@ -7,7 +7,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: |
-          sudo pip install awscli 
+          sudo pip install awscli
       # build and push Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
@@ -27,13 +27,14 @@ jobs:
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CIRCLE_PROJECT_REPONAME:latest
 
             # create task for docker deploy
-#                "memoryReservation": 800,
-#                "portMappings": [
-#                  {
-#                    "containerPort": 3000,
-#                    "hostPort": 80
-#                  }
-#                ],
+            # "memoryReservation": 800,
+            # "portMappings": [
+            #   {
+            #     "containerPort": 3000,
+            #     "hostPort": 80
+            #   }
+            # ],
+
             task_template='[
               {
                 "name": "%s",
@@ -44,6 +45,7 @@ jobs:
                 ]
               }
             ]'
+
             echo "$task_template"
 
             task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $DOCKER_IMAGE $TOKEN_BOT)
