@@ -17,7 +17,7 @@ jobs:
           command: |
 
             CLUSTER="$CIRCLE_PROJECT_REPONAME-app"
-            FAMILY="$CIRCLE_PROJECT_REPONAME-app"
+            FAMILY="$CIRCLE_PROJECT_REPONAME"
             DOCKER_IMAGE=$CIRCLE_PROJECT_REPONAME
             TASK="$CIRCLE_PROJECT_REPONAME"
             SERVICE="$CIRCLE_PROJECT_REPONAME-service"
