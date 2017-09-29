@@ -16,6 +16,13 @@ jobs:
       - deploy:
           name: Push application Docker image
           command: |
+
+            CLUSTER="$CIRCLE_PROJECT_REPONAME-app"
+            FAMILY="$CIRCLE_PROJECT_REPONAME-app"
+            DOCKER_IMAGE=$CIRCLE_PROJECT_REPONAME
+            TASK="$CIRCLE_PROJECT_REPONAME-app"
+            SERVICE="$CIRCLE_PROJECT_REPONAME-service"
+
             eval "$(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)"
             docker tag $CIRCLE_PROJECT_REPONAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CIRCLE_PROJECT_REPONAME:latest
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CIRCLE_PROJECT_REPONAME:latest
@@ -43,7 +50,7 @@ jobs:
             task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $TASK $CIRCLE_SHA1)
 
             # Register task definition
-            json=$(aws ecs register-task-definition --container-definitions "$task_def" --family "$FAMILY")
+            json=$(aws ecs register-task-definition --container-definitions "$task_def" --family "$CIRCLE_PROJECT_REPONAME")
 
             # Grab revision # using regular bash and grep
             revision=$(echo "$json" | grep -o '"revision": [0-9]*' | grep -Eo '[0-9]+')
