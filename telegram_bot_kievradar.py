@@ -147,7 +147,7 @@ def radar_kiev(bot, update):
 
 
 def echo(bot, update):
-    update.message.reply_text("v1312" + update.message.text)
+    update.message.reply_text("v17 02" + update.message.text)
 
 
 def error(bot, update, error):
