@@ -50,6 +50,7 @@ jobs:
             echo "$task_template"
 
             task_def=$(printf "$task_template" $TASK $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $DOCKER_IMAGE $CIRCLE_SHA1 $TOKEN_BOT)
+            echo $task_def
 
             # Register task definition
             json=$(aws ecs register-task-definition --container-definitions "$task_def" --family "$FAMILY")
