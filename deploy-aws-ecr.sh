@@ -63,12 +63,16 @@ make_task_def(){
                     "containerPort": 8080,
                     "hostPort": 80
                 }
+            ],
+            "environment" : [
+                { "name" : "TOKEN_BOT", "value" : "%s" }
             ]
+
         }
     ]'
 
-    task_def=$(printf "$task_template" $CIRCLE_PROJECT_REPONAME $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $CIRCLE_PROJECT_REPONAME $CIRCLE_SHA1)
-#    echo $task_def
+    task_def=$(printf "$task_template" $CIRCLE_PROJECT_REPONAME $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $CIRCLE_PROJECT_REPONAME $CIRCLE_SHA1 $TOKEN_BOT)
+    echo $task_def
 }
 
 push_ecr_image(){
