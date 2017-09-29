@@ -27,7 +27,6 @@ jobs:
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CIRCLE_PROJECT_REPONAME:latest
 
             # create task for docker deploy
-            # "memoryReservation": 800,
             # "portMappings": [
             #   {
             #     "containerPort": 3000,
@@ -40,6 +39,7 @@ jobs:
                 "name": "%s",
                 "image": "%s.dkr.ecr.%s.amazonaws.com/%s:latest",
                 "essential": true,
+                "memoryReservation": 800,
                 "environment" : [
                     { "name" : "TOKEN_BOT", "value" : "%s" }
                 ]
