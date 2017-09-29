@@ -10,4 +10,4 @@ It echoes back input and supports two commands - radar map, and news from yandex
 
 Also features automatic build and deploy to AWS cloud ECR service as a container. Please see .circleci/config.yml
 
-TBD: stateful, store mysql data in attached volume.
+TBD: stateful, store mysql data in attached volume, tests.
