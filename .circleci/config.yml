@@ -33,7 +33,7 @@ jobs:
                 "name": "%s",
                 "image": "%s.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/%s:%s",
                 "essential": true,
-                "memoryReservation": 1000,
+                "memoryReservation": 800,
                 "portMappings": [
                   {
                     "containerPort": 3000,
